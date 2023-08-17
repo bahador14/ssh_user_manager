@@ -43,6 +43,6 @@ while true; do
         fi
     done
 
-    sleep 5   # Wait for 5 seconds
+    sleep 2   # Wait for 5 seconds
     clear     # Clear the terminal
 done
