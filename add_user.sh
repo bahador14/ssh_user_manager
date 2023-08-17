@@ -16,9 +16,11 @@ if ! date -d "$expire_date" >/dev/null 2>&1; then
     exit 1
 fi
 
+current_dir=$(pwd)
 # Generate the useradd command
-# useradd_command="useradd -M -s /bin/vpn.sh -e $expire_date $username"
-useradd_command="useradd -M -e $expire_date $username"
+# useradd_command="useradd -M -s $current_dir/only_vpn_bash_script.sh -e $expire_date $username"
+useradd_command="useradd -M -s $current_dir/only_vpn_bash_script.sh $username"
+
 
 # Add the user and set the password
 $useradd_command

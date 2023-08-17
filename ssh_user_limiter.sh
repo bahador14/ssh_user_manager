@@ -21,15 +21,16 @@ while true; do
         # Count the user's active SSH connections
         user_connections=$(echo "$lsof_output" | grep -c "$user.*ESTABLISHED")
 
-        # Debug output
-        echo "User: $user, Max Connections: $limit, Current Connections: $user_connections, Expire Date: $expire_date"
+        if [ "$user_connections" -gt 0 ]; then
+            echo "User: $user, Max Connections: $limit, Current Connections: $user_connections, Expire Date: $expire_date"
+        fi
         
         if [ "$user_connections" -gt "$limit" ]; then
             # Terminate extra connections for the user
             extra_connections=$(echo "$lsof_output" | grep "$user.*ESTABLISHED" | tail -n +$((limit+1)) | awk '{print $2}')
             for conn in $extra_connections; do
                 kill -9 $conn
-                echo "Terminating extra connections for user $user: $conn"
+                echo "Terminating extra connections for user $user"
             done
         fi
         if [ "$current_date" \> "$expire_date" ]; then
@@ -37,7 +38,7 @@ while true; do
             connections_to_terminate=$(echo "$lsof_output" | grep "$user.*ESTABLISHED" | awk '{print $2}')
             for conn in $connections_to_terminate; do
                 kill -9 $conn
-                echo "Terminating all connections for user $user: $conn"
+                echo "Terminating all connections for user $user"
             done
         fi
     done
